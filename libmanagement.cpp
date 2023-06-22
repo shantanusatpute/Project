@@ -1,10 +1,10 @@
-#include <iostream>
-#include <string>
+#include <bits/stdc++.h> 
+
 using namespace std;
 
 class Node {
 public:
-    virtual ~Node() {}
+    virtual ~Node() {} //When a class has a virtual destructor, it allows objects of derived classes to be correctly destroyed through a pointer to the base class.
 };
 
 class Student : public Node {
@@ -29,6 +29,8 @@ public:
     Node* root;
 
     library_management() : root(nullptr) {} //constructor for the library_management class. It initializes the root member variable of the library_management class to nullptr.
+    vector<string> books;
+    int bookCount;
 
     void insert(Node* newNode) {
         if (root == nullptr) {
@@ -65,7 +67,7 @@ public:
         }
     }
 
-    void display(Student** students, int& count) {
+    void display(Student** students, int& count) { //pointer to a pointer of type Student
         if (root != nullptr) {
             Student* student = dynamic_cast<Student*>(root);
             students[count++] = student;
@@ -75,8 +77,8 @@ public:
     void issueBook() {
         string name;
         cout << "Enter the name of the student: ";
-        cin.ignore();
-        getline(cin, name);
+        cin.ignore(); //called to clear the input buffer before reading a new line of input
+        getline(cin, name); //used to read a line of text from the user's input and store it in the variable name
 
         Student* current = searchStudent(root, name);
         if (current != nullptr) {
@@ -86,6 +88,41 @@ public:
             cout << "Student not found in the library." << endl;
         }
     }
+    
+    void addBook(const std::string& book) 
+    {
+        books.push_back(book);
+        bookCount++;
+        std::cout << "Book added: " << book << std::endl;
+    }
+    
+    void removeBook(const std::string& book) 
+    {
+        auto it = std::find(books.begin(), books.end(), book);
+        if (it != books.end()) 
+        {
+            books.erase(it);
+            bookCount--;
+            std::cout << "Book removed: " << book << std::endl;
+        } 
+        else 
+        {
+            std::cout << "Book not found in the library." << std::endl;
+        }
+    }
+    
+    void displayBooks() 
+    {
+        if (bookCount > 0) {
+            std::cout << "\n------- Books in the Library -------" << std::endl;
+            for (const auto& book : books) {
+                std::cout << "Book: " << book << std::endl;
+            }
+        } else {
+            std::cout << "No books in the library." << std::endl;
+        }
+    }
+    
 
     void returnBook() {
         string name;
@@ -190,14 +227,26 @@ int main() {
         case 6:
             lib.returnBook();
             break;
-        case 7:
-            // Add Books
+        case 7: 
+        {
+            std::string book;
+            std::cout << "Enter the name of the book: ";
+            std::cin.ignore();
+            getline(std::cin, book);
+            lib.addBook(book);
             break;
-        case 8:
-            // Remove Books
+        }
+        case 8: 
+        {
+            std::string book;
+            std::cout << "Enter the name of the book to be removed: ";
+            std::cin.ignore();
+            getline(std::cin, book);
+            lib.removeBook(book);
             break;
+        }
         case 9:
-            // Display Books
+            lib.displayBooks();
             break;
         case 10:
             cout << "Exiting the program..." << endl;
